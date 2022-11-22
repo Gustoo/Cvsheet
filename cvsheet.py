@@ -1,4 +1,5 @@
 #python -m streamlit run Cvsheet.py
+#pip freeze > requirements.txt
 import cv2
 import numpy as np
 import ku1
