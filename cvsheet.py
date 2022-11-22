@@ -31,11 +31,11 @@ def pdftoimg(pdfPath, imagePath):
         if not os.path.exists(imagePath):
             os.makedirs(imagePath)
 
-        name = pdfPath.split(".")[0]
+        name = pdfPath.split("/")[2].split(".")[0]
         pix.writePNG(imagePath + '/' + '%s%s.png' % (name,pg+1))
 def zip_file(src_dir):
     zip_name = src_dir +'.zip'
-    z = zipfile.ZipFile("zippdf", 'w', zipfile.ZIP_DEFLATED)
+    z = zipfile.ZipFile("results", 'w', zipfile.ZIP_DEFLATED)
     for dirpath, dirnames, filenames in os.walk(src_dir):
         fpath = dirpath.replace(src_dir,'')
         fpath = fpath and fpath + os.sep or ''
@@ -76,7 +76,7 @@ def cvcheck(pathImage):
             rectCon = ku1.rectContour(contours)
             biggestPoints = ku1.getCornerPoints(rectCon[0])
             gradePoints = ku1.getCornerPoints(rectCon[1])
-            print(gradePoints)
+            #print(gradePoints)
 
             if biggestPoints.size != 0 and gradePoints.size != 0:
                 biggestPoints = ku1.reorder(biggestPoints)
@@ -204,7 +204,7 @@ def downloadimg(imgdl):
 def zipf(path):
     zip_file = path + '.zip'
     z = zipfile.ZipFile(zip_file, 'w', zipfile.ZIP_DEFLATED)
-    print(z)
+    #print(z)
     for path, dirname, file_name in os.walk(path):
         fpath = path.replace(path, '')
         fpath = fpath and fpath + os.sep
@@ -221,11 +221,11 @@ if __name__ == '__main__':
 
     try:
         unzip_file(uploaded_file, "./zippdf")
-        path = 'zippdf'
+        path = './zippdf'
         for file_name in os.listdir(path):
             pdfPath = file_name
             imagePath = './imgs'
-            pdftoimg(pdfPath, imagePath)
+            pdftoimg("./zippdf/"+pdfPath, imagePath)
             #print(file_name)
         #pdfPath = 'opencvsheet.pdf'
         #imagePath = './imgs'
