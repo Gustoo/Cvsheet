@@ -17,6 +17,7 @@ widthImg = 800
 questions = 10
 choices = 4
 ans = [3,1,1,1,1,1,1,1,1,3]
+anss =[]
 ##################################
 def pdftoimg(pdfPath, imagePath):
     pdfDoc = fitz.open(pdfPath)
@@ -41,7 +42,7 @@ def zip_file(src_dir):
         fpath = fpath and fpath + os.sep or ''
         for filename in filenames:
             z.write(os.path.join(dirpath, filename),fpath+filename)
-            print ('==压缩成功==')
+            print('==压缩成功==')
     z.close()
 def unzip_file(zip_src, dst_dir):
     r = zipfile.is_zipfile(zip_src)
@@ -169,11 +170,12 @@ def cvcheck(pathImage):
         count += 1
         a+=1
 def show():
+    global ans,anss
     st.title('Batch marking')
     st.write("""By Gusto""")
-    st.info("This software is used to Mark the papers. You can download "
+    st.info("This software is used to mark the papers. You can download "
             "dedicated answer sheets. You can scan the completed answer sheet(PDF), upload the ZIP file, and the APP will "
-            "automatically grade the papers and output the ZIP(jpg) file"
+            "automatically grade the papers and output the jpg file"
             )
     col1, col2 = st.columns(2)
     with col1:
@@ -182,6 +184,23 @@ def show():
     with col2:
         st.header("Filling Example")
         st.image("222.png",width=200)
+    st.info("You need to enter the correct answer, enter the form like \"3,1,1,1,1,1,1,1,1,3\" in english")
+    st.info(" A=0, B=1, C=2, D=3")
+    Answers = st.text_input('Answers', '3,1,1,1,1,1,1,1,1,3')
+    try:
+        if Answers != '3,1,1,1,1,1,1,1,1,3':
+            for i in Answers.split(","):
+                anss.append(int(i))
+        ans = anss
+        if(len(ans)==10):
+            st.success("Answer modified successfully")
+        else:
+            st.error("Please enter ten answers")
+    except:
+        st.error("Please enter ten answers")
+
+
+
 def downloadzip(imgzip):
     with open(imgzip, "rb") as fp:
         btn = st.download_button(
