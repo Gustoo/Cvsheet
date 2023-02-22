@@ -172,7 +172,7 @@ def cvcheck(pathImage):
 def show():
     global ans,anss
     st.title('Batch marking')
-    st.write("""By Leo&Meson&Gusto""")
+    st.write("""By Leo&Gusto""")
     st.info("This software is used to mark the papers. You can download "
             "dedicated answer sheets. You can scan the completed answer sheet(PDF), upload the ZIP file, and the APP will "
             "automatically grade the papers and output the jpg file"
