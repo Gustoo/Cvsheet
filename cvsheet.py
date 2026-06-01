@@ -242,7 +242,7 @@ def zipf(path):
 if __name__ == '__main__':
     show()
     downloadimg("answersheet.png")
-    uploaded_file = st.file_uploader("Choose a ZIP file")
+        uploaded_file = st.file_uploader("Choose a ZIP file")
 
     if uploaded_file is not None:
         st.write("已上传：", uploaded_file.name)
@@ -250,20 +250,46 @@ if __name__ == '__main__':
         if st.button("开始批阅", type="primary"):
             temp_zip_path = "temp_upload.zip"
             
+            # 保存上传的文件
             with open(temp_zip_path, "wb") as f:
                 f.write(uploaded_file.getbuffer())
 
             try:
+                # 创建必要文件夹
+                os.makedirs("results", exist_ok=True)
+                os.makedirs("imgs", exist_ok=True)
+                os.makedirs("zippdf", exist_ok=True)
+
+                # 解压
                 unzip_file(temp_zip_path, "./zippdf")
                 
-                
+                # ==================== 调试信息 ====================
+                pdf_files = [f for f in os.listdir("./zippdf") if f.lower().endswith('.pdf')]
+                st.write(f"✅ 找到 {len(pdf_files)} 个PDF文件")
 
-                zip_result = zipf("results")   # 调用修复后的 zipf
+                # PDF转图片
+                for pdf_name in pdf_files:
+                    pdf_path = os.path.join("./zippdf", pdf_name)
+                    pdftoimg(pdf_path, "imgs")
 
-                st.success("✅ 批阅完成！")
+                # 检查生成的图片
+                img_files = [f for f in os.listdir("imgs") if f.endswith(('.png', '.jpg'))]
+                st.write(f"✅ 已生成 {len(img_files)} 张图片")
 
-            # 下载按钮
-                if os.path.exists(zip_result) and os.path.getsize(zip_result) > 100:  # 检查是否为空
+                # 处理每张图片
+                for img_name in img_files:
+                    cvcheck(os.path.join("imgs", img_name))
+
+                # 检查结果文件夹
+                result_files = [f for f in os.listdir("results") if f.endswith(('.jpg', '.png'))]
+                st.write(f"✅ results 文件夹中共有 {len(result_files)} 个文件")
+
+                # 打包
+                if len(result_files) > 0:
+                    zip_result = zipf("results")
+                    st.success("✅ 批阅完成！")
+
+                    # 下载按钮
                     with open(zip_result, "rb") as f:
                         st.download_button(
                             label="📥 下载所有批阅结果 (ZIP)",
@@ -272,9 +298,9 @@ if __name__ == '__main__':
                             mime="application/zip"
                         )
                 else:
-                    st.error("结果文件夹为空，没有生成文件")
-            except Exception as e:
-                st.error(f"处理出错: {str(e)}")
+                    st.error("❌ results 文件夹为空，没有生成处理结果")
 
+            except Exception as e:
+                st.error(f"处理过程中出错: {str(e)}")
 
 
