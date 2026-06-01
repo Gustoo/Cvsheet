@@ -256,23 +256,27 @@ if __name__ == '__main__':
             try:
                 unzip_file(temp_zip_path, "./zippdf")
                 
-                # ==================== 你原来的后续处理代码 ====================
-                # pdf转图片、cvcheck、生成results等...
-                # ...（保持你原来的逻辑不变）
+                
 
-                zip_result = zipf("results")   # 打包结果
+                zip_result = zipf("results")   # 调用修复后的 zipf
 
                 st.success("✅ 批阅完成！")
 
-                # 下载按钮
-                with open(zip_result, "rb") as f:
-                    st.download_button(
+            # 下载按钮
+                if os.path.exists(zip_result) and os.path.getsize(zip_result) > 100:  # 检查是否为空
+                    with open(zip_result, "rb") as f:
+                        st.download_button(
                         label="📥 下载所有批阅结果 (ZIP)",
                         data=f,
                         file_name="批阅结果.zip",
                         mime="application/zip"
                     )
+                else:
+                    st.error("结果文件夹为空，没有生成文件")
 
-            except Exception as e:
-                st.error(f"处理出错: {str(e)}")
+                    zip_result = zipf("results")   # 打包结果
+
+                    st.success("✅ 批阅完成！")
+
+
 
