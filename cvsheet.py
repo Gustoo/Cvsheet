@@ -271,8 +271,8 @@ if __name__ == '__main__':
                         file_name="批阅结果.zip",
                         mime="application/zip"
                     )
-            else:
-                st.error("结果文件夹为空，没有生成文件")
+                else:
+                    st.error("结果文件夹为空，没有生成文件")
 
 
 
