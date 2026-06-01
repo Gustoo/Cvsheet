@@ -221,14 +221,22 @@ def downloadimg(imgdl):
         if btn == True:
             st.success("The answer sheet is downloaded successfully")
 def zipf(path):
-    zip_file = path + '.zip'
+    """打包 results 文件夹"""
+    zip_file = "批阅结果.zip"          # ← 固定文件名，更清晰
+    
+    # 如果已存在，先删除
+    if os.path.exists(zip_file):
+        os.remove(zip_file)
+    
     z = zipfile.ZipFile(zip_file, 'w', zipfile.ZIP_DEFLATED)
-    #print(z)
-    for path, dirname, file_name in os.walk(path):
-        fpath = path.replace(path, '')
-        fpath = fpath and fpath + os.sep
-        for filename in file_name:
-            z.write(os.path.join(path, filename), fpath + filename)
+    
+    for root, dirs, files in os.walk(path):
+        for file in files:
+            file_path = os.path.join(root, file)
+            arcname = os.path.relpath(file_path, path)   # 保持相对路径
+            z.write(file_path, arcname)
+            print(f"已压缩: {arcname}")
+    
     z.close()
     return zip_file
 if __name__ == '__main__':
