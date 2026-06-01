@@ -21,19 +21,20 @@ anss =[]
 ##################################
 def pdftoimg(pdfPath, imagePath):
     pdfDoc = fitz.open(pdfPath)
-    for pg in range(pdfDoc.pageCount):
+    base_name = os.path.splitext(os.path.basename(pdfPath))[0]
+    for pg in range(len(pdfDoc)):  # 修改这一行
         page = pdfDoc[pg]
-        rotate = int(0)
+        rotate = 0
         zoom_x = 1.33333333
         zoom_y = 1.33333333
         mat = fitz.Matrix(zoom_x, zoom_y).preRotate(rotate)
-        pix = page.getPixmap(matrix=mat, alpha=False)
+        pix = page.get_pixmap(matrix=mat, alpha=False)
 
         if not os.path.exists(imagePath):
             os.makedirs(imagePath)
 
-        name = pdfPath.split("/")[2].split(".")[0]
-        pix.writePNG(imagePath + '/' + '%s%s.png' % (name,pg+1))
+        out_path = os.path.join(imagePath, f'{base_name}_pg{pg+1}.png')
+        pix.save(out_path)
 def zip_file(src_dir):
     zip_name = src_dir +'.zip'
     z = zipfile.ZipFile("results", 'w', zipfile.ZIP_DEFLATED)
