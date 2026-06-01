@@ -273,6 +273,8 @@ if __name__ == '__main__':
                         )
                 else:
                     st.error("结果文件夹为空，没有生成文件")
+            except Exception as e:
+                st.error(f"处理出错: {str(e)}")
 
 
 
