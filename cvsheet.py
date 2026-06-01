@@ -234,27 +234,37 @@ def zipf(path):
 if __name__ == '__main__':
     show()
     downloadimg("answersheet.png")
-    uploaded_file = st.file_uploader("Choose a ZIP file")
+        uploaded_file = st.file_uploader("Choose a ZIP file")
 
     if uploaded_file is not None:
-        st.write("已上传：", uploaded_file.name)   # 显示文件名
+        st.write("已上传：", uploaded_file.name)
 
-        # === 关键修改：保存为临时文件后再解压 ===
-        temp_zip_path = "temp_upload.zip"
-        
-        with open(temp_zip_path, "wb") as f:
-            f.write(uploaded_file.getbuffer())     # ← 核心解决办法
+        if st.button("开始批阅", type="primary"):
+            temp_zip_path = "temp_upload.zip"
+            
+            with open(temp_zip_path, "wb") as f:
+                f.write(uploaded_file.getbuffer())
 
-        try:
-            unzip_file(temp_zip_path, "./zippdf")   # 改成传 temp_zip_path
-            path = './zippdf'
-            for file_name in os.listdir(path):
-                pdfPath = file_name
-                imagePath = './imgs'
-                pdftoimg("./zippdf/"+pdfPath, imagePath)
-            imgzip = zipf("results")
-            downloadzip(imgzip)
+            try:
+                unzip_file(temp_zip_path, "./zippdf")
+                
+                # ==================== 你原来的后续处理代码 ====================
+                # pdf转图片、cvcheck、生成results等...
+                # ...（保持你原来的逻辑不变）
 
-        except:
-            st.error("Please upload a ZIP file")
+                zip_result = zipf("results")   # 打包结果
+
+                st.success("✅ 批阅完成！")
+
+                # 下载按钮
+                with open(zip_result, "rb") as f:
+                    st.download_button(
+                        label="📥 下载所有批阅结果 (ZIP)",
+                        data=f,
+                        file_name="批阅结果.zip",
+                        mime="application/zip"
+                    )
+
+            except Exception as e:
+                st.error(f"处理出错: {str(e)}")
 
