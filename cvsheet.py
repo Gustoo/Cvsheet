@@ -247,4 +247,14 @@ if __name__ == '__main__':
 
         try:
             unzip_file(temp_zip_path, "./zippdf")   # 改成传 temp_zip_path
+            path = './zippdf'
+            for file_name in os.listdir(path):
+                pdfPath = file_name
+                imagePath = './imgs'
+                pdftoimg("./zippdf/"+pdfPath, imagePath)
+            imgzip = zipf("results")
+            downloadzip(imgzip)
+
+        except:
+            st.error("Please upload a ZIP file")
 
