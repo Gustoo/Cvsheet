@@ -265,12 +265,12 @@ if __name__ == '__main__':
             # 下载按钮
                 if os.path.exists(zip_result) and os.path.getsize(zip_result) > 100:  # 检查是否为空
                     with open(zip_result, "rb") as f:
-                    st.download_button(
-                        label="📥 下载所有批阅结果 (ZIP)",
-                        data=f,
-                        file_name="批阅结果.zip",
-                        mime="application/zip"
-                    )
+                        st.download_button(
+                            label="📥 下载所有批阅结果 (ZIP)",
+                            data=f,
+                            file_name="批阅结果.zip",
+                            mime="application/zip"
+                        )
                 else:
                     st.error("结果文件夹为空，没有生成文件")
 
