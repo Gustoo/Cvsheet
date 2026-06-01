@@ -142,7 +142,10 @@ def show():
     global ans, anss
     st.title('📝 答题卡自动批阅系统')
     st.write("By Leo&Gusto")
-
+    st.info("This software is used to mark the papers. You can download "
+            "dedicated answer sheets. You can scan the completed answer sheet(PDF), upload the ZIP file, and the APP will "
+            "automatically grade the papers and output the jpg file"
+)
     col1, col2 = st.columns(2)
     with col1:
         st.subheader("标准答题卡")
