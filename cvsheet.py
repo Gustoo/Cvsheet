@@ -76,6 +76,9 @@ def cvcheck(pathImage):
             contours, hierarchy = cv2.findContours(imgCanny, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
             cv2.drawContours(imgContours, contours, -1, (0, 255, 0), 10)
             rectCon = ku1.rectContour(contours)
+            if len(rectCon) < 2:
+                st.warning(f"图片 {pathImage} 中检测不到足够的答题卡区域，已跳过")
+                return   # 直接返回，不处理该图
             biggestPoints = ku1.getCornerPoints(rectCon[0])
             gradePoints = ku1.getCornerPoints(rectCon[1])
             #print(gradePoints)
