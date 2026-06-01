@@ -235,27 +235,16 @@ if __name__ == '__main__':
     show()
     downloadimg("answersheet.png")
     uploaded_file = st.file_uploader("Choose a ZIP file")
-    #if uploaded_file is not None:
-    st.write(uploaded_file)
 
-    try:
-        unzip_file(uploaded_file, "./zippdf")
-        path = './zippdf'
-        for file_name in os.listdir(path):
-            pdfPath = file_name
-            imagePath = './imgs'
-            pdftoimg("./zippdf/"+pdfPath, imagePath)
-            #print(file_name)
-        #pdfPath = 'opencvsheet.pdf'
-        #imagePath = './imgs'
-        #pdftoimg(pdfPath, imagePath)
-        for file_name in os.listdir("imgs"):
-            #print(file_name)
-            #cvcheck("./imgs/opencvsheet1.png")
-            cvcheck("./imgs/"+file_name)
-        imgzip = zipf("results")
-        downloadzip(imgzip)
+    if uploaded_file is not None:
+        st.write("已上传：", uploaded_file.name)   # 显示文件名
 
-    except:
-        st.error("Please upload a ZIP file")
+        # === 关键修改：保存为临时文件后再解压 ===
+        temp_zip_path = "temp_upload.zip"
+        
+        with open(temp_zip_path, "wb") as f:
+            f.write(uploaded_file.getbuffer())     # ← 核心解决办法
+
+        try:
+            unzip_file(temp_zip_path, "./zippdf")   # 改成传 temp_zip_path
 
