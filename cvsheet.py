@@ -242,7 +242,7 @@ def zipf(path):
 if __name__ == '__main__':
     show()
     downloadimg("answersheet.png")
-        uploaded_file = st.file_uploader("Choose a ZIP file")
+    uploaded_file = st.file_uploader("Choose a ZIP file")
 
     if uploaded_file is not None:
         st.write("已上传：", uploaded_file.name)
