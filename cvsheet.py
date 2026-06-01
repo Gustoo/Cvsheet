@@ -11,7 +11,7 @@ import streamlit as st
 #################################
 webCamFeed = False
 #pathImage = "222.png"
-#cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
 heightImg = 1100
 widthImg = 800
 questions = 10
